@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 // Share selected location with navigation activity
                 Bundle bundleLocation = new Bundle();
                 if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Home)
-                    bundleLocation.putString("selectedArea", radioButtonHome.getText().toString());
+                    bundleLocation.putString("selectedLocation", radioButtonHome.getText().toString());
                 if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Building36)
-                    bundleLocation.putString("selectedArea", radioButtonBuilding36.getText().toString());
+                    bundleLocation.putString("selectedLocation", radioButtonBuilding36.getText().toString());
                 intentStartTraining.putExtras(bundleLocation);
                 intentStartTraining.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentStartTraining);

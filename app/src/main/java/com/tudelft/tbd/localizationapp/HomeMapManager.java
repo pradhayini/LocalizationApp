@@ -3,6 +3,7 @@ package com.tudelft.tbd.localizationapp;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 
@@ -10,19 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by pradhayini on 25-2-18.
+ * Class that creates and manages a map for 'Home'
  */
 
-public class HomeMapCreator implements MapCreator{
+public class HomeMapManager implements MapManager {
 
     private List<ShapeDrawable> walls;
-    private int width;
-    private int height;
 
-    public Bitmap drawHomeMap(int width, int height) {
-
-        this.width = width;
-        this.height = height;
+    public Bitmap drawMap(int width, int height) {
 
         // Set the map dimensions
         int mapWidth = 640+40;
@@ -65,6 +61,14 @@ public class HomeMapCreator implements MapCreator{
         // create a map
         Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
         Canvas areaMap = new Canvas(bitmap);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLUE);
+        paint.setTextSize(50*oneUnit);
+        areaMap.drawText("1", 258*oneUnit, 270*oneUnit, paint);
+        areaMap.drawText("2", 588*oneUnit, 414*oneUnit, paint);
+        areaMap.drawText("3", 258*oneUnit, 669*oneUnit, paint);
+        areaMap.drawText("4", 345*oneUnit, 980*oneUnit, paint);
 
         // draw the objects
         for(ShapeDrawable wall : walls) {

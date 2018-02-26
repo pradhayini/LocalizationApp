@@ -17,7 +17,7 @@ public class TrainingActivity extends AppCompatActivity implements ViewTreeObser
     private int trainingArea;
     private ImageView imageAreaMap;
 
-    private MapCreator mapCreator;
+    private MapManager mapManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +31,14 @@ public class TrainingActivity extends AppCompatActivity implements ViewTreeObser
         // Get selected location
         Bundle bundleLocation = getIntent().getExtras();
         if(bundleLocation != null)
-            location = bundleLocation.getString("selectedArea", "def");
+            location = bundleLocation.getString("selectedLocation", "def");
         else
             location = "Undefined location.";
 
         if(location.equals(getString(R.string.home)))
-            mapCreator = new HomeMapCreator();
+            mapManager = new HomeMapManager();
         else if(location.equals(getString(R.string.eemcs_building_36)))
-            mapCreator = new Building36MapCreator();
+            mapManager = new Building36MapManager();
 
         buttonStartTraining.setOnClickListener(new TrainingButtonClickListener());
     }
@@ -47,9 +47,9 @@ public class TrainingActivity extends AppCompatActivity implements ViewTreeObser
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if(mapCreator != null)
+        if(mapManager != null)
         {
-            Bitmap map = mapCreator.drawHomeMap(imageAreaMap.getWidth(), imageAreaMap.getHeight());
+            Bitmap map = mapManager.drawMap(imageAreaMap.getWidth(), imageAreaMap.getHeight());
             imageAreaMap.setImageBitmap(map);
             imageAreaMap.setScaleType(ImageView.ScaleType.FIT_XY);
         }
@@ -66,11 +66,18 @@ public class TrainingActivity extends AppCompatActivity implements ViewTreeObser
         @Override
         public void onClick(View view) {
             trainingArea = Integer.parseInt(inputCellId.getText().toString());
-            StartTraining();
-        }
 
-        public void StartTraining(){
-            // store training data
+            if(mapManager != null) {
+                Intent intentStartMeasurement = new Intent(getApplicationContext(), RssMeasurementActivity.class);
+
+                // Share selected area with measurement activity
+                Bundle bundle = new Bundle();
+                bundle.putInt("selectedArea", trainingArea);
+                bundle.putString("selectedLocation", location);
+                intentStartMeasurement.putExtras(bundle);
+                intentStartMeasurement.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentStartMeasurement);
+            }
         }
     }
 }

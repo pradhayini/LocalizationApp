@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tudelft.tbd.localizationapp">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".NavigationActivity" />
-        <activity android:name=".TrainingActivity"></activity>
+        <activity android:name=".TrainingActivity" />
+        <activity android:name=".RssMeasurementActivity" />
     </application>
 
 </manifest>
