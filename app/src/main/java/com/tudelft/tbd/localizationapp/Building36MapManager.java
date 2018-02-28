@@ -12,4 +12,9 @@ public class Building36MapManager implements MapManager {
     public Bitmap drawMap(int width, int height) {
         return null;
     }
+
+    @Override
+    public int[] getCellCenter(int cellId, int width, int height) {
+        return new int[2];
+    }
 }

@@ -1,4 +1,4 @@
-package com.tudelft.tbd.localizationapp;
+package com.tudelft.tbd.database;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.content.Context;
  * Manage creation of an instance of the data base for Home measurements
  */
 
-public class Building36DatabaseManager  {
+public class HomeDatabaseManager {
 
     private static AppDatabase database;
 
@@ -19,7 +19,7 @@ public class Building36DatabaseManager  {
     public static synchronized AppDatabase getDatabaseInstance(Context context){
         if(database == null && context != null){
             database =  Room.databaseBuilder(context,
-                    AppDatabase.class, "building36_database").build();
+                    AppDatabase.class, "home_database").build();
         }
         return database;
     }

@@ -15,4 +15,6 @@ public interface MapManager {
      * @return : Bitmap image that contains the generated map
      */
     Bitmap drawMap(int width, int height);
+
+    int[] getCellCenter(int cellId, int width, int height);
 }

@@ -14,7 +14,6 @@ public class TrainingActivity extends AppCompatActivity implements ViewTreeObser
 
     private String location;
     private EditText inputCellId;
-    private int trainingArea;
     private ImageView imageAreaMap;
 
     private MapManager mapManager;
@@ -65,7 +64,7 @@ public class TrainingActivity extends AppCompatActivity implements ViewTreeObser
 
         @Override
         public void onClick(View view) {
-            trainingArea = Integer.parseInt(inputCellId.getText().toString());
+            int trainingArea = Integer.parseInt(inputCellId.getText().toString());
 
             if(mapManager != null) {
                 Intent intentStartMeasurement = new Intent(getApplicationContext(), RssMeasurementActivity.class);

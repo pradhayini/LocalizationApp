@@ -5,12 +5,20 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.tudelft.tbd.database.AppDatabase;
+import com.tudelft.tbd.database.Building36DatabaseManager;
+import com.tudelft.tbd.database.HomeDatabaseManager;
+import com.tudelft.tbd.database.TrainingMeasurement;
+import com.tudelft.tbd.lib.kNNTraining;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,9 +32,12 @@ public class RssMeasurementActivity extends AppCompatActivity {
      */
     private TextView textRssi;
 
-    private AppDatabase database;
+    private static AppDatabase database;
     private int area;
     private String location;
+
+    private int interval = 10000;
+    private Handler handler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,13 +49,7 @@ public class RssMeasurementActivity extends AppCompatActivity {
 
         Button buttonStop = findViewById(R.id.button_stop);
         // Set listener for the button.
-        buttonStop.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //close database
-                finish();
-            }
-        });
+        buttonStop.setOnClickListener(new StopMeasurmentListener());
 
         // Get location information
         Bundle bundle = getIntent().getExtras();
@@ -58,9 +63,9 @@ public class RssMeasurementActivity extends AppCompatActivity {
         else if(location.equals(getString(R.string.eemcs_building_36)))
             database = Building36DatabaseManager.getDatabaseInstance(getApplicationContext());
 
-        startMeasurement();
+        handler = new Handler();
+        startScheduledMeasurementTask();
     }
-
 
     // onResume() registers the accelerometer for listening the events
     protected void onResume() {
@@ -72,42 +77,95 @@ public class RssMeasurementActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void startMeasurement() {
+    /**
+     * Reference: https://stackoverflow.com/a/6242292/2169877
+     */
+    Runnable runRssMeasurement = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                measureRss();
+            }
+            finally {
+                handler.postDelayed(runRssMeasurement, interval);
+            }
+        }
+    };
+
+    /**
+     * Repeat RSS measurement and storage every 10 seconds
+     */
+    private void startScheduledMeasurementTask() {
+        runRssMeasurement.run();
+    }
+
+    private void stopScheduledMeasurementTask(){
+        handler.removeCallbacks(runRssMeasurement);
+    }
+
+    private void measureRss() {
         // Set text.
         textRssi.setText(String.format("\n\tScan all access points for cell %d:", area));
         // Set wifi manager.
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
         if(wifiManager != null) {
             // Start a wifi scan.
             wifiManager.startScan();
             // Store results in a list.
             List<ScanResult> scanResults = wifiManager.getScanResults();
+            List<TrainingMeasurement> trainingMeasurements = new ArrayList<>();
+            TrainingMeasurement[] conversionArray = {};
 
             // Write results to a label
             for (ScanResult scanResult : scanResults) {
+                int rssiAbs = WifiManager.calculateSignalLevel(scanResult.level, 256);
                 textRssi.setText(textRssi.getText() + "\n\tBSSID = "
                         + scanResult.BSSID + "    RSSI = "
-                        + scanResult.level + "dBm");
-                storeMeasurement(scanResult);
-            }
+                        + rssiAbs);
 
+                trainingMeasurements.add(
+                        new TrainingMeasurement(
+                                area,
+                                scanResult.BSSID,
+                                rssiAbs,
+                                System.currentTimeMillis()));
+            }
+            //Store trainingMeasurements
+            new StoreMeasurementsTask().execute(trainingMeasurements.toArray(conversionArray));
         }
     }
 
-    private void storeMeasurement(ScanResult scanResult) {
-        Measurement measurement = new Measurement();
-        measurement.setCellId(area);
-        measurement.setBssId(scanResult.BSSID);
-        measurement.setRssi(scanResult.level);
-        new StoreMeasurementsTask().execute(measurement);
-    }
-
-    private class StoreMeasurementsTask extends AsyncTask<Measurement, Void, Void> {
+    private static class StoreMeasurementsTask extends AsyncTask<TrainingMeasurement, Void, Void> {
         @Override
-        protected Void doInBackground(Measurement... measurement) {
-            database.measurementDao().insertAll(measurement);
+        protected Void doInBackground(TrainingMeasurement... trainingMeasurement) {
+            database.measurementDao().insertAll(trainingMeasurement);
             return null;
         }
     }
 
+    private class StopMeasurmentListener implements OnClickListener{
+
+        @Override
+        public void onClick(View view) {
+            // Stop measurement
+            stopScheduledMeasurementTask();
+
+            new PerformTrainingTask().execute();
+
+            // Finish and cleanup activity
+            finish();
+        }
+    }
+
+    private static class PerformTrainingTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Perform training on measured data
+            kNNTraining trainer = new kNNTraining(database);
+            trainer.doTraining();
+            return null;
+        }
+    }
 }

@@ -15,8 +15,7 @@ import java.util.List;
  */
 
 public class HomeMapManager implements MapManager {
-
-    private List<ShapeDrawable> walls;
+    private int oneUnit;
 
     public Bitmap drawMap(int width, int height) {
 
@@ -29,9 +28,9 @@ public class HomeMapManager implements MapManager {
         if(mapHeight * floatOneUnit > height)
             floatOneUnit = (float) height/mapHeight;
 
-        int oneUnit = (int) floatOneUnit;
+        oneUnit = (int) floatOneUnit;
 
-        walls = new ArrayList<>();
+        List<ShapeDrawable> walls = new ArrayList<>();
         // Horizontal Walls
         ShapeDrawable wall1 = new ShapeDrawable(new RectShape());
         wall1.setBounds(10*oneUnit, 10*oneUnit, 670*oneUnit, 20*oneUnit);
@@ -77,5 +76,31 @@ public class HomeMapManager implements MapManager {
         }
 
         return bitmap;
+    }
+
+    public int[] getCellCenter(int cellId, int width, int height){
+        // left, top, right, bottom
+        int[] coords = new int[4];
+        switch (cellId){
+            case 1:
+                coords[0] = 308*oneUnit;
+                coords[1] = 320*oneUnit;
+                break;
+            case 2:
+                coords[0] = 638*oneUnit;
+                coords[1] = 464*oneUnit;
+                break;
+            case 3:
+                coords[0] = 308*oneUnit;
+                coords[1] = 719*oneUnit;
+                break;
+            case 4:
+                coords[0] = 395*oneUnit;
+                coords[1] = 1030*oneUnit;
+                break;
+        }
+        coords[2] = coords[0] + width*oneUnit;
+        coords[3] = coords[1] + height*oneUnit;
+        return coords;
     }
 }

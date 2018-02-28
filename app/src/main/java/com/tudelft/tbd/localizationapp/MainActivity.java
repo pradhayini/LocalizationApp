@@ -35,16 +35,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intentStartNavigation = new Intent(getApplicationContext(), NavigationActivity.class);
-
-                // Share selected location with navigation activity
-                Bundle bundleLocation = new Bundle();
-                if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Home)
-                    bundleLocation.putString("selectedArea", "home");
-                if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Building36)
-                    bundleLocation.putString("selectedArea", "36");
-                intentStartNavigation.putExtras(bundleLocation);
-                intentStartNavigation.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentStartNavigation);
+                populateAndStartNextActivity(intentStartNavigation);
             }
         });
 
@@ -55,17 +46,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intentStartTraining = new Intent(getApplicationContext(), TrainingActivity.class);
-
-                // Share selected location with navigation activity
-                Bundle bundleLocation = new Bundle();
-                if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Home)
-                    bundleLocation.putString("selectedLocation", radioButtonHome.getText().toString());
-                if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Building36)
-                    bundleLocation.putString("selectedLocation", radioButtonBuilding36.getText().toString());
-                intentStartTraining.putExtras(bundleLocation);
-                intentStartTraining.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentStartTraining);
+                populateAndStartNextActivity(intentStartTraining);
             }
         });
+    }
+
+    private void populateAndStartNextActivity(Intent intent){
+
+        // Share selected location with next activity
+        Bundle bundleLocation = new Bundle();
+        if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Home)
+            bundleLocation.putString("selectedLocation", radioButtonHome.getText().toString());
+        if(radioGroupLocation.getCheckedRadioButtonId() == R.id.radioButton_Building36)
+            bundleLocation.putString("selectedLocation", radioButtonBuilding36.getText().toString());
+        intent.putExtras(bundleLocation);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+
     }
 }
