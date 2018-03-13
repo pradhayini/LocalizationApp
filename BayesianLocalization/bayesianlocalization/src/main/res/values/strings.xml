@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">Area36</string>
+    <string name="app_name">Area36 (Bayesian)</string>
     <string name="home">Home</string>
     <string name="eemcs_building_36">EEMCS - Building 36</string>
     <string name="locate_me">Locate me</string>
     <string name="key_startingFloor">startingFloor</string>
+    <string name="type_cell">cell</string>
+    <string name="type_wall">wall</string>
+    <string name="type_passagePartition">part</string>
 </resources>

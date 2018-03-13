@@ -45,16 +45,21 @@ public class NavigationActivity extends AppCompatActivity implements ViewTreeObs
      * The stepCounter.
      */
     private Sensor stepCounter;
+    private Sensor stepDetector;
+    private SensorListener sensorListener;
+
 
     private int floorNum;
     private int cellNum;
-    private  TextView textFloorNum;
+    private TextView textFloorNum;
     private TextView textCellNum;
     private ImageView imageAreaMap;
     private ImageView imagePosition;
 
     private MapManager mapManager;
-    private SensorListener sensorListener;
+
+    private float previousStepCount;
+    private float latestStepCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,16 +93,24 @@ public class NavigationActivity extends AppCompatActivity implements ViewTreeObs
         if (sensorManager != null){
             // set stepCounter
             stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+            sensorListener = new SensorListener();
             if(stepCounter != null){
-                // register 'this' as a listener that updates values. Each time a sensor value changes,
-                // the method 'onSensorChanged()' is called.
-                sensorListener = new SensorListener();
-                sensorManager.registerListener(sensorListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+                // register 'this' as a listener that updates values. Each time a sensor value
+                // changes, the method 'onSensorChanged()' is called.
+                sensorManager.registerListener(sensorListener, stepCounter,
+                        SensorManager.SENSOR_DELAY_NORMAL);
+            }
+
+            stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+            if(stepDetector != null){
+                // register 'this' as a listener that updates values. Each time a sensor value
+                // changes, the method 'onSensorChanged()' is called.
+                sensorManager.registerListener(sensorListener, stepDetector,
+                        SensorManager.SENSOR_DELAY_NORMAL);
             }
         } else {
-            // No stepCounter!
+            // No step sensors!
         }
-
 
         Button buttonLocateMe = findViewById(R.id.button_nav_LocateMe);
         buttonLocateMe.setOnClickListener(new NavigationButtonClickListener());
@@ -108,6 +121,8 @@ public class NavigationActivity extends AppCompatActivity implements ViewTreeObs
         super.onResume();
         sensorListener = new SensorListener();
         sensorManager.registerListener(sensorListener, stepCounter,
+                SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(sensorListener, stepDetector,
                 SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -163,6 +178,13 @@ public class NavigationActivity extends AppCompatActivity implements ViewTreeObs
         return measurements;
     }
 
+    private float getNumberOfStepsTaken(){
+        if(latestStepCount > previousStepCount)
+            return (latestStepCount - previousStepCount);
+        else
+            return (Float.MAX_VALUE - previousStepCount) + latestStepCount;
+    }
+
     class NavigationButtonClickListener implements View.OnClickListener {
 
         @Override
@@ -181,16 +203,29 @@ public class NavigationActivity extends AppCompatActivity implements ViewTreeObs
             imagePosition.setY(coord[1]);
             //imagePosition.setLayoutParams(lp);
             imagePosition.setVisibility(View.VISIBLE);
+
+            // Reset step count tracker
+            previousStepCount = latestStepCount;
         }
     }
 
     class SensorListener implements SensorEventListener {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            if(sensorEvent.values[0] == 1)
-                imagePosition.setImageDrawable(getDrawable(R.drawable.ic_walking));
-            else
-                imagePosition.setImageDrawable(getDrawable(R.drawable.ic_standing));
+            switch (sensorEvent.sensor.getType())
+            {
+                case Sensor.TYPE_STEP_COUNTER: {
+                    latestStepCount = sensorEvent.values[0];
+                    break;
+                }
+                case Sensor.TYPE_STEP_DETECTOR: {
+                    if(sensorEvent.values[0] == 1)
+                        imagePosition.setImageDrawable(getDrawable(R.drawable.ic_walking));
+                    else
+                        imagePosition.setImageDrawable(getDrawable(R.drawable.ic_standing));
+                    break;
+                }
+            }
         }
         @Override
         public void onAccuracyChanged(Sensor sensor, int i) {

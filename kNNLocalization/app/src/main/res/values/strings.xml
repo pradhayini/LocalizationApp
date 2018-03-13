@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Area36</string>
+    <string name="app_name">Area36 (kNN)</string>
     <string name="home">Home</string>
     <string name="eemcs_building_36">EEMCS - Building 36</string>
 </resources>

@@ -29,16 +29,28 @@ import java.util.List;
  */
 
 @Dao
-public interface MapCoordinateDao {
-    @Query("SELECT * FROM mapCoordinate")
-    List<MapCoordinate> getAll();
+public interface MapCoordinatesDao {
+    @Query("SELECT * FROM mapCoordinates")
+    List<MapCoordinates> getAll();
+
+    @Query("SELECT * FROM mapCoordinates WHERE type = cell")
+    List<MapCoordinates> getAllCells();
+
+    @Query("SELECT * FROM mapCoordinates WHERE type = wall OR type = part")
+    List<MapCoordinates> getAllCellBoundaries();
+
+    @Query("SELECT * FROM mapCoordinates WHERE type = wall")
+    List<MapCoordinates> getAllWalls();
+
+    @Query("SELECT * FROM mapCoordinates WHERE type = part")
+    List<MapCoordinates> getAllPassagePartitions();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(MapCoordinate... mapCoordinate);
+    void insertAll(MapCoordinates... mapCoordinates);
 
     @Update
-    public void updateCoordinates(MapCoordinate... mapCoordinate);
+    public void updateCoordinates(MapCoordinates... mapCoordinates);
 
     @Delete
-    void delete(MapCoordinate mapCoordinate);
+    void delete(MapCoordinates mapCoordinates);
 }

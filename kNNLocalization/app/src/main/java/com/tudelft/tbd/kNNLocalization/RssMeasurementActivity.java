@@ -51,7 +51,7 @@ public class RssMeasurementActivity extends AppCompatActivity {
     private int area;
     private String location;
 
-    private int interval = 10000;
+    private int interval = 1000;
     private Handler handler;
 
     @Override

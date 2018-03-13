@@ -17,43 +17,47 @@ package com.tudelft.tbd.database;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 
 /**
- * Created by pradhayini on 10-3-18.
+ * Created by pradhayini on 12-3-18.
  */
 
-@Entity(tableName = "mapCoordinate")
-public class MapCoordinate {
-    @PrimaryKey
-    private int cellId;
+@Entity(tableName = "mapCoordinates", primaryKeys = {"id", "type"})
+public class MapCoordinates {
+    @ColumnInfo(name = "id")
+    private Integer id;
+
+    /*
+    Type can be "cell", "wall", "passagePartition"
+     */
+    @ColumnInfo(name = "type")
+    private String type;
 
     @ColumnInfo(name = "left")
-    private int left;
+    private Integer left;
 
     @ColumnInfo(name = "top")
-    private int top;
+    private Integer top;
 
     @ColumnInfo(name = "right")
-    private int right;
+    private Integer right;
 
     @ColumnInfo(name = "bottom")
-    private int bottom;
+    private Integer bottom;
 
-    public MapCoordinate(int cellId, int left, int top, int right, int bottom){
-        this.cellId = cellId;
+    public MapCoordinates(int id, String type, int left, int top, int right, int bottom){
+        this.id = id;
+        this.type = type;
         this.left = left;
         this.top = top;
         this.right = right;
         this.bottom = bottom;
     }
 
-    public int getCellId() {
-        return cellId;
-    }
+    public int getId() { return id; }
 
-    public void setCellId(int cellId) {
-        this.cellId = cellId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getLeft() {
@@ -87,4 +91,8 @@ public class MapCoordinate {
     public void setBottom(int bottom) {
         this.bottom = bottom;
     }
+
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
 }
