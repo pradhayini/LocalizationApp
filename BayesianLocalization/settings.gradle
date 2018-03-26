@@ -1,1 +1,1 @@
-include ':app', ':bayesianlocalization'
+include ':app', ':lib'
