@@ -31,8 +31,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tudelft.tbd.database.Area28DatabaseManager;
-import com.tudelft.tbd.database.Measurement;
+import com.tudelft.tbd.databasehandler.Area28DatabaseManager;
+import com.tudelft.tbd.databasehandler.Measurement;
 
 import java.util.ArrayList;
 import java.util.List;

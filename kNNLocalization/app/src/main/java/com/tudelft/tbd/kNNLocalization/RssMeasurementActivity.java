@@ -163,14 +163,18 @@ public class RssMeasurementActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            // Stop measurement
-            stopScheduledMeasurementTask();
-
-            new PerformTrainingTask().execute();
-
-            // Finish and cleanup activity
-            finish();
+            stopMeasurement();
         }
+    }
+
+    private void stopMeasurement(){
+        // Stop measurement
+        stopScheduledMeasurementTask();
+
+        new PerformTrainingTask().execute();
+
+        // Finish and cleanup activity
+        finish();
     }
 
     private static class PerformTrainingTask extends AsyncTask<Void, Void, Void> {

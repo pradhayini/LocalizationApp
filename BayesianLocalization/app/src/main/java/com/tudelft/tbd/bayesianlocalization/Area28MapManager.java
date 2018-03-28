@@ -22,9 +22,9 @@ import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 
-import com.tudelft.tbd.database.Area28DatabaseManager;
-import com.tudelft.tbd.database.Boundary;
-import com.tudelft.tbd.database.Cell;
+import com.tudelft.tbd.databasehandler.Area28DatabaseManager;
+import com.tudelft.tbd.databasehandler.Boundary;
+import com.tudelft.tbd.databasehandler.Cell;
 
 import java.util.List;
 
