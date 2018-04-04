@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/BayesianLocalization.iml" filepath="$PROJECT_DIR$/BayesianLocalization.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/databasehandler/databasehandler.iml" filepath="$PROJECT_DIR$/databasehandler/databasehandler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/radiomapgenerator/radiomapgenerator.iml" filepath="$PROJECT_DIR$/radiomapgenerator/radiomapgenerator.iml" />
     </modules>
   </component>
 </project>

@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 /**
  * Defines structure of each RSS measurement
  */
-@Entity(tableName = "trainingMeasurement")
+@Entity(tableName = "training_measurement")
 public class TrainingMeasurement {
     @PrimaryKey(autoGenerate = true)
     private Integer id;

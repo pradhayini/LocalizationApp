@@ -1,1 +1,1 @@
-include ':app', ':databasehandler', ':radiomapgenerator'
+include ':app', ':databasehandler'

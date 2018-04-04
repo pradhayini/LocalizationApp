@@ -15,16 +15,16 @@ import java.util.List;
 @Dao
 public interface TrainingMeasurementDao {
 
-    @Query("SELECT * FROM trainingMeasurement")
+    @Query("SELECT * FROM training_measurement")
     List<TrainingMeasurement> getAll();
 
-    @Query("SELECT DISTINCT(cell_id) FROM trainingMeasurement")
+    @Query("SELECT DISTINCT(cell_id) FROM training_measurement")
     List<Integer> getAllCellIds();
 
-    @Query("SELECT DISTINCT(bss_id) FROM trainingMeasurement")
+    @Query("SELECT DISTINCT(bss_id) FROM training_measurement")
     List<String> getAllBssIds();
 
-    @Query("SELECT AVG(rssi) FROM trainingMeasurement WHERE cell_id LIKE :cellId AND bss_id LIKE :bssId")
+    @Query("SELECT AVG(rssi) FROM training_measurement WHERE cell_id LIKE :cellId AND bss_id LIKE :bssId")
     int getAvgRssPerBssIdPerCellId(int cellId, String bssId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

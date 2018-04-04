@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tudelft.tbd.databasehandler.Area28DatabaseManager;
-import com.tudelft.tbd.databasehandler.Measurement;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,0 +1,64 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "befc139224d35b4d768af870a566674b",
+    "entities": [
+      {
+        "tableName": "pmf_parameters",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bss_id` TEXT NOT NULL, `cell_id` INTEGER NOT NULL, `mean` REAL NOT NULL, `variance` REAL NOT NULL, `upper_limit` REAL NOT NULL, `lower_limit` REAL NOT NULL, PRIMARY KEY(`cell_id`, `bss_id`))",
+        "fields": [
+          {
+            "fieldPath": "bssId",
+            "columnName": "bss_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cellId",
+            "columnName": "cell_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mean",
+            "columnName": "mean",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "variance",
+            "columnName": "variance",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "upperLimit",
+            "columnName": "upper_limit",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lowerLimit",
+            "columnName": "lower_limit",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cell_id",
+            "bss_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"befc139224d35b4d768af870a566674b\")"
+    ]
+  }
+}

@@ -28,14 +28,14 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Manage creation of an instance of the data base for Home measurements
+ * Manage creation of an instance of the data base for Area28 location details
  * Reference: https://stackoverflow.com/a/9109728/2169877
  */
 
 public class Area28DatabaseManager {
 
-    private static AppDatabase database;
-    private static String DB_NAME = "area28_database";
+    private static Area28Database database;
+    private static String DB_NAME = "area28_database.db";
     private Context context;
 
     /**
@@ -50,12 +50,12 @@ public class Area28DatabaseManager {
      * Get singleton instance of the database
      * @return : instance of database
      */
-    private static synchronized AppDatabase getDatabaseInstance(Context context){
+    private static synchronized Area28Database getDatabaseInstance(Context context){
         if(database == null && context != null){
 
             // Create Room database builder to read/write to database
             database =  Room.databaseBuilder(context,
-                    AppDatabase.class, DB_NAME).build();
+                    Area28Database.class, DB_NAME).build();
 
             // Copy pre-created database to application runtime memory space
             try {
@@ -160,7 +160,7 @@ public class Area28DatabaseManager {
 
         @Override
         protected List<Cell> doInBackground(Integer... floors) {
-            List<Cell> cells =  Area28DatabaseManager.getDatabaseInstance(context).cellsDao().getAll(floors[0]);
+            List<Cell> cells =  getDatabaseInstance(context).cellsDao().getAll(floors[0]);
             return cells;
         }
     }
@@ -169,7 +169,7 @@ public class Area28DatabaseManager {
 
         @Override
         protected List<Boundary> doInBackground(Integer... floors) {
-            return Area28DatabaseManager.getDatabaseInstance(context).boundariesDao().getAllWalls(floors[0]);
+            return getDatabaseInstance(context).boundariesDao().getAllWalls(floors[0]);
         }
     }
 
@@ -177,7 +177,7 @@ public class Area28DatabaseManager {
 
         @Override
         protected List<Boundary> doInBackground(Integer... floors) {
-            return Area28DatabaseManager.getDatabaseInstance(context).boundariesDao().getAllDoors(floors[0]);
+            return getDatabaseInstance(context).boundariesDao().getAllDoors(floors[0]);
         }
     }
 
@@ -185,7 +185,7 @@ public class Area28DatabaseManager {
 
         @Override
         protected List<Boundary> doInBackground(Integer... floors) {
-            return Area28DatabaseManager.getDatabaseInstance(context).boundariesDao().getAllPartitions(floors[0]);
+            return getDatabaseInstance(context).boundariesDao().getAllPartitions(floors[0]);
         }
     }
 
@@ -193,7 +193,7 @@ public class Area28DatabaseManager {
 
         @Override
         protected List<Boundary> doInBackground(Integer... floors) {
-            return Area28DatabaseManager.getDatabaseInstance(context).boundariesDao().getAllBorders(floors[0]);
+            return getDatabaseInstance(context).boundariesDao().getAllBorders(floors[0]);
         }
     }
 }
