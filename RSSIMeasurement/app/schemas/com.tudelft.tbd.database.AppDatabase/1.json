@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4faef6aa222a63a37843f045d6aadd66",
+    "identityHash": "48fc34960d37e3248040a5dd5a82231d",
     "entities": [
       {
-        "tableName": "trainingMeasurement",
+        "tableName": "training_measurement",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `time_stamp` INTEGER NOT NULL, `cell_id` INTEGER NOT NULL, `bss_id` TEXT, `vendor_id` TEXT, `rssi` INTEGER NOT NULL)",
         "fields": [
           {
@@ -57,7 +57,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4faef6aa222a63a37843f045d6aadd66\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"48fc34960d37e3248040a5dd5a82231d\")"
     ]
   }
 }

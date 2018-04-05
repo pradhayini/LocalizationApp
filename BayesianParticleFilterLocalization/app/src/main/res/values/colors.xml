@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="PaleTurquoise">#AFEEEE</color>
+    <color name="MediumTurquoise">#48D1CC</color>
+    <color name="LightCoral">#F08080</color>
+    <color name="LightGoldenrodYellow">#FAFAD2</color>
+    <color name="LightSalmon">#FFA07A</color>
+    <color name="LightSteelBlue">#B0C4DE</color>
+    <color name="SteelBlue">#4682B4</color>
+    <color name="LightBlue">#ADD8E6</color>
+</resources>

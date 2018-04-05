@@ -135,21 +135,17 @@ public class DatabaseManager {
 		                + " bss_id TEXT NOT NULL,"
 		                + "	mean REAL NOT NULL,"
 		                + "	variance REAL NOT NULL,"
-		                + "	upper_limit REAL NOT NULL,"
-		                + "	lower_limit REAL NOT NULL,"
 		                + " PRIMARY KEY (cell_id, bss_id))");
 	        	
 	        	// Insert data into table
 	        	for(PmfParameter parameter : parameterSet) {
 	        		statement.execute(
 	        				"INSERT OR REPLACE INTO "
-	        				+ pmfTablename + " (cell_id, bss_id, mean, variance, upper_limit, lower_limit)"
-	        				+ " VALUES (" + parameter.getCellid() + ", "
-	        				+ "\"" + parameter.getBssid() + "\", "
+	        				+ pmfTablename + " (cell_id, bss_id, mean, variance)"
+	        				+ " VALUES (" + parameter.getCellId() + ", "
+	        				+ "\"" + parameter.getBssId() + "\", "
 	        				+ parameter.getMean() + ", "
-	        				+ parameter.getVariance() + ", "
-	        				+ parameter.getUpperLimit() + ", "
-	        				+ parameter.getLowerLimit() + ")"
+	        				+ parameter.getVariance() + ")"
 	        		);
 	        	}
 	        	

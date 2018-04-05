@@ -16,28 +16,30 @@
 package com.tudelft.tbd.BayesianRadioMapGenerator;
 
 public class PmfParameter {
-	private String bssid;
-	private int cellid;
+	private String bssId;
+	private int cellId;
 	private float mean;
 	private float variance;
-	private float upperLimit;
-	private float lowerLimit;
-	
-	public PmfParameter(String bssid, int cellid, float mean, float variance, float upperLimit, float lowerLimit) {
-		this.bssid = bssid;
-		this.cellid = cellid;
+		
+	public PmfParameter(float mean, float variance) {
 		this.mean = mean;
 		this.variance = variance;
-		this.upperLimit = upperLimit;
-		this.lowerLimit = lowerLimit;
 	}
 
-	public String getBssid() {
-		return bssid;
+	public String getBssId() {
+		return bssId;
+	}
+	
+	public void setBssId(String bssId) {
+		this.bssId = bssId;
 	}
 
-	public int getCellid() {
-		return cellid;
+	public int getCellId() {
+		return cellId;
+	}
+	
+	public void setCellId(int cellId) {
+		this.cellId = cellId;
 	}
 
 	public float getMean() {
@@ -46,13 +48,5 @@ public class PmfParameter {
 	
 	public float getVariance() {
 		return variance;
-	}
-
-	public float getUpperLimit() {
-		return upperLimit;
-	}
-
-	public float getLowerLimit() {
-		return lowerLimit;
 	}
 }

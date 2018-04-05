@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">Area28 (Bayesian)</string>
-    <string name="eemcs_building_28">EEMCS - Building 28</string>
-    <string name="locate_me">Locate me</string>
-    <string name="key_startingFloor">startingFloor</string>
-    <string name="type_door">door</string>
-    <string name="type_wall">wall</string>
-    <string name="type_passagePartition">part</string>
-</resources>

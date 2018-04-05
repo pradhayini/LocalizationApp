@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Area28</string>
+    <string name="locate_me">Locate me</string>
+    <string name="bayesian">Bayesian</string>
+    <string name="particle_filters">Particle Filters</string>
+    <string name="key_startingFloor">startingFloor</string>
+    <string name="type_door">door</string>
+    <string name="type_wall">wall</string>
+    <string name="type_passagePartition">part</string>
+    <string name="method">method</string>
+    <string name="height">height</string>
+    <string name="cellNum">Cell #:</string>
+    <string name="floormap">FloorMap</string>
+    <string name="userposition">UserPosition</string>
+    <string name="enableRealTime">enableRealTime</string>
+</resources>

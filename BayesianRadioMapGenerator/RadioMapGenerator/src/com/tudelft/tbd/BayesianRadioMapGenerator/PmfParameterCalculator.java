@@ -16,10 +16,12 @@
 package com.tudelft.tbd.BayesianRadioMapGenerator;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PmfParameterCalculator {
 	private DatabaseManager databaseManager;
+	private static final float cbrt3 = (float)Math.cbrt(3);
 	
 	public PmfParameterCalculator() {
 		databaseManager = new DatabaseManager();
@@ -33,31 +35,56 @@ public class PmfParameterCalculator {
 	 * Based on:
 	 * Localization Based on RSSI Exploiting Gaussian and Averaging Filter in Wireless Sensor Network
 	 * Authors: Ranjan Kumar MahapatraEmail authorN. S. V. Shet
-	 * @param cellid
-	 * @param bssid
+	 * @param cellId
+	 * @param bssId
 	 */
-	private PmfParameter calculateGaussianPdf(int cellid, String bssid) {
-		PmfParameter parameter = null;
-		List<Integer> rssiValues = databaseManager.getRssiPerCellPerBssid(cellid, bssid);
-		if(!rssiValues.isEmpty() && rssiValues.size() > 1) {
-			// Calculate mean
-			float mean = ((float)(rssiValues.stream().mapToInt(Integer::intValue).sum())) / rssiValues.size();
+	private PmfParameter calculateGaussianPdf(int cellId, String bssId) {
+		List<Integer> rssiValues = databaseManager.getRssiPerCellPerBssid(cellId, bssId);
+		PmfParameter parameter = calculateMeanAndVariance(rssiValues);
+		int initialSize = rssiValues.size();
+		
+		if(parameter != null) {
+			// RSSI filter range
+			float delta = cbrt3 * (float) (Math.sqrt(parameter.getVariance()));
+			float upperLimit = parameter.getMean() + delta;
+			float lowerLimit = parameter.getMean() - delta;
 			
+			// Remove values outside range (outliers)
+			for (Iterator<Integer> iterator = rssiValues.iterator(); iterator.hasNext();) {
+			    Integer rssi = iterator.next();
+				if((Float.compare(rssi, upperLimit) > 0) || (Float.compare(rssi, lowerLimit) < 0)) {
+				    iterator.remove();
+			    }
+			}
+			
+			if(initialSize > rssiValues.size()) {
+				// Recalculate mean and variance
+				parameter = calculateMeanAndVariance(rssiValues);
+			}
+		}
+
+		if(parameter != null) {
+			parameter.setBssId(bssId);
+			parameter.setCellId(cellId);
+		}
+		return parameter;
+	}
+	
+	private PmfParameter calculateMeanAndVariance(List<Integer> rssiValues) {
+		PmfParameter parameter = null;
+		if (!rssiValues.isEmpty() && rssiValues.size() > 1) {
+			// Calculate mean
+			float mean = ((float) (rssiValues.stream().mapToInt(Integer::intValue).sum())) / rssiValues.size();
 			// Calculate variance
 			float variance = 0;
-			for(int rssi : rssiValues) {
-				float diff = (rssi - mean); 
-				variance += (diff * diff); 
+			for (int rssi : rssiValues) {
+				float diff = (rssi - mean);
+				variance += (diff * diff);
 			}
 			variance /= (rssiValues.size() - 1);
-			
-			// RSSI filter range
-			float delta = (float) (Math.cbrt(3) * Math.sqrt(variance));
-			float upperLimit = mean + delta;
-			float lowerLimit = mean - delta;
-			
-			parameter = new PmfParameter(bssid, cellid, mean, variance, upperLimit, lowerLimit);		
+			parameter = new PmfParameter(mean, variance);
 		}
+		
 		return parameter;
 	}
 	
