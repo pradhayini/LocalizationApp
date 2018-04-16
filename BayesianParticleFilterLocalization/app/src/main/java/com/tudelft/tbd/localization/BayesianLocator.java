@@ -25,7 +25,6 @@ import com.tudelft.tbd.repositories.Area28Repository;
 import com.tudelft.tbd.repositories.RadioMapRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

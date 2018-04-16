@@ -1,11 +1,15 @@
 package com.tudelft.tbd.map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.tudelft.tbd.localization.R;
 import com.tudelft.tbd.viewmodels.BaseViewModel;
 
 
@@ -20,6 +24,9 @@ public class MapView extends SurfaceView {
     private boolean initialized = false;
 
     private BaseViewModel viewModel;
+    private Bitmap userIconStanding;
+    private boolean drawIconStanding;
+    private Paint paint;
 
     public MapView(Context context) {
         super(context);
@@ -59,6 +66,8 @@ public class MapView extends SurfaceView {
                 }
 
             });
+
+            paint = new Paint();
             initialized = true;
         }
     }
@@ -80,12 +89,23 @@ public class MapView extends SurfaceView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if(canvas != null){
-            final float scaleFactor = Math.min( getWidth() / (float)mapWidth, getHeight() / (float)mapHeight );
-            if(Float.compare(scaleFactor, 0) > 0){
-                canvas.scale(scaleFactor, scaleFactor);
-            }
-            if(viewModel != null){
+        if(canvas != null && viewModel != null){
+            if(drawIconStanding){
+                // Draw user icon
+                int[] coord = viewModel.getCurrentCellCenter();
+                if(coord != null) {
+                    if (userIconStanding == null) {
+                        userIconStanding = BitmapFactory.decodeResource(getResources(), R.drawable.ic_standing);
+                    }
+                    canvas.drawBitmap(userIconStanding, coord[0], coord[1], paint);
+                }
+                drawIconStanding = false;
+            } else {
+                // Update map
+                final float scaleFactor = Math.min( getWidth() / (float)mapWidth, getHeight() / (float)mapHeight );
+                if(Float.compare(scaleFactor, 0) > 0){
+                    canvas.scale(scaleFactor, scaleFactor);
+                }
                 viewModel.createMap(canvas);
             }
         }
@@ -98,4 +118,10 @@ public class MapView extends SurfaceView {
     public void startDrawing(){
         mapUpdateThread.run();
     }
+
+    public void startDrawingUserIcon(){
+        drawIconStanding = true;
+        mapUpdateThread.run();
+    }
+
 }

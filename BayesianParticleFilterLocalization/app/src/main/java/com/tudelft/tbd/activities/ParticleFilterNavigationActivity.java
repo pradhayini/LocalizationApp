@@ -43,14 +43,12 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
     // Sensor Variables
     private SensorManager sensorManager;
     private Sensor stepCounter;
-    private Sensor stepDetector;
     private Sensor rotationVector;
     private Sensor accelerometer;
     private SensorListener sensorListener;
 
     // Sensor accuracy check variables
     private int scLastAccuracy;
-    private int sdLastAccuracy;
     private int rvLastAccuracy;
     private int acLastAccuracy;
 
@@ -58,7 +56,6 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
     private TextView textFloorNum;
     private TextView textCellNum;
     private MapView imageAreaMap;
-    private ImageView imagePosition;
     private ParticleFilterViewModel viewModel;
 
     @Override
@@ -70,7 +67,6 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
         textFloorNum = findViewById(R.id.textView_FloorNum);
         textCellNum = findViewById(R.id.textView_CellNum);
         imageAreaMap = findViewById(R.id.image_floorMap);
-        imagePosition = findViewById(R.id.image_position);
         Button buttonLocateMe = findViewById(R.id.button_nav_LocateMe);
 
         // Get starting floor number and user height
@@ -117,7 +113,7 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
 
                 textCellNum.setText(newCellIds);
                 if(!newCellIds.contains(";")){
-                    updateMovingIcon();
+                    imageAreaMap.startDrawingUserIcon();
                     sensorManager.unregisterListener(sensorListener);
                 }
             }
@@ -136,7 +132,6 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
         });
 
         // Initialize event listeners
-        imagePosition.setVisibility(View.INVISIBLE);
         buttonLocateMe.setOnClickListener(new NavigationButtonClickListener());
     }
 
@@ -216,14 +211,6 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
                         SensorManager.SENSOR_DELAY_NORMAL);
             }
 
-            if(stepDetector == null) {
-                stepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-            }
-            if(stepDetector != null){
-                sensorManager.registerListener(sensorListener, stepDetector,
-                        SensorManager.SENSOR_DELAY_NORMAL);
-            }
-
             if(rotationVector == null){
                 rotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
             }
@@ -265,27 +252,12 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
     }
 
     /**
-     * Update user location in map
-     */
-    private void updateMovingIcon(){
-        // TODO move to surfaceview
-        int[] coord = viewModel.getCurrentCellCenter();
-        if(coord != null){
-            imagePosition.setX(coord[0]);
-            imagePosition.setY(coord[1]);
-            imagePosition.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
      * Triggers navigation and UI update on button click
      */
     class NavigationButtonClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
-            // Reset position icon
-            imagePosition.setImageDrawable(getDrawable(R.drawable.ic_standing));
             sensorManager.unregisterListener(sensorListener);
             registerMotionSensors();
             viewModel.initialize();
@@ -304,16 +276,6 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
                     // Used for distance calculation
                     if(scLastAccuracy != SensorManager.SENSOR_STATUS_UNRELIABLE)
                         viewModel.calculateDistanceMoved((int)sensorEvent.values[0]);
-                    break;
-                }
-                case Sensor.TYPE_STEP_DETECTOR: {
-                    // Used to choose between user walking or standing icon
-                    if(sdLastAccuracy != SensorManager.SENSOR_STATUS_UNRELIABLE){
-                        if(sensorEvent.values[0] == 1)
-                            imagePosition.setImageDrawable(getDrawable(R.drawable.ic_walking));
-                        else
-                            imagePosition.setImageDrawable(getDrawable(R.drawable.ic_standing));
-                    }
                     break;
                 }
                 case Sensor.TYPE_ROTATION_VECTOR: {
@@ -345,12 +307,6 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
                 case Sensor.TYPE_STEP_COUNTER:{
                     if (scLastAccuracy != accuracy) {
                         scLastAccuracy = accuracy;
-                    }
-                    break;
-                }
-                case Sensor.TYPE_STEP_DETECTOR:{
-                    if (sdLastAccuracy != accuracy) {
-                        sdLastAccuracy = accuracy;
                     }
                     break;
                 }

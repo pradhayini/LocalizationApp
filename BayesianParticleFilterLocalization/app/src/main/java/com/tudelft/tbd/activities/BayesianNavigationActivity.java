@@ -24,7 +24,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tudelft.tbd.localization.R;
@@ -43,7 +42,6 @@ public class BayesianNavigationActivity extends AppCompatActivity implements Vie
     private TextView textFloorNum;
     private TextView textCellNum;
     private MapView imageAreaMap;
-    private ImageView imagePosition;
 
     private BayesianViewModel viewModel;
 
@@ -56,7 +54,6 @@ public class BayesianNavigationActivity extends AppCompatActivity implements Vie
         textFloorNum = findViewById(R.id.textView_FloorNum);
         textCellNum = findViewById(R.id.textView_CellNum);
         imageAreaMap = findViewById(R.id.image_floorMap);
-        imagePosition = findViewById(R.id.image_position);
         Button buttonLocateMe = findViewById(R.id.button_nav_LocateMe);
 
         // Initializations
@@ -75,7 +72,7 @@ public class BayesianNavigationActivity extends AppCompatActivity implements Vie
                 textCellNum.setText(newCellIds);
                 drawFloorMap();
                 if(!newCellIds.contains(";"))
-                    updateMovingIcon();
+                    imageAreaMap.startDrawingUserIcon();
             }
         });
 
@@ -88,8 +85,6 @@ public class BayesianNavigationActivity extends AppCompatActivity implements Vie
                 drawFloorMap();
             }
         });
-
-        imagePosition.setVisibility(View.INVISIBLE);
 
         buttonLocateMe.setOnClickListener(new NavigationButtonClickListener());
     }
@@ -136,29 +131,12 @@ public class BayesianNavigationActivity extends AppCompatActivity implements Vie
     }
 
     /**
-     * Update user location in map
-     */
-    private void updateMovingIcon(){
-        // TODO move to surfaceview
-        int[] coord = viewModel.getCurrentCellCenter();
-        if(coord != null){
-            imagePosition.setX(coord[0]);
-            imagePosition.setY(coord[1]);
-            imagePosition.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
      * Triggers navigation and UI update on button click
      */
     class NavigationButtonClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
-
-            // Reset position icon
-            imagePosition.setImageDrawable(getDrawable(R.drawable.ic_standing));
-
             viewModel.localize();
         }
     }
