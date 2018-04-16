@@ -90,6 +90,10 @@ public class MapView extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
         if(canvas != null && viewModel != null){
+            final float scaleFactor = Math.min( getWidth() / (float)mapWidth, getHeight() / (float)mapHeight );
+            if(Float.compare(scaleFactor, 0) > 0){
+                canvas.scale(scaleFactor, scaleFactor);
+            }
             if(drawIconStanding){
                 // Draw user icon
                 int[] coord = viewModel.getCurrentCellCenter();
@@ -97,15 +101,11 @@ public class MapView extends SurfaceView {
                     if (userIconStanding == null) {
                         userIconStanding = BitmapFactory.decodeResource(getResources(), R.drawable.ic_standing);
                     }
-                    canvas.drawBitmap(userIconStanding, coord[0], coord[1], paint);
+                    canvas.drawBitmap(userIconStanding, coord[0]*scaleFactor, coord[1]*scaleFactor, paint);
                 }
                 drawIconStanding = false;
             } else {
                 // Update map
-                final float scaleFactor = Math.min( getWidth() / (float)mapWidth, getHeight() / (float)mapHeight );
-                if(Float.compare(scaleFactor, 0) > 0){
-                    canvas.scale(scaleFactor, scaleFactor);
-                }
                 viewModel.createMap(canvas);
             }
         }

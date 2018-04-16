@@ -71,8 +71,9 @@ public class BayesianNavigationActivity extends AppCompatActivity implements Vie
 
                 textCellNum.setText(newCellIds);
                 drawFloorMap();
-                if(!newCellIds.contains(";"))
-                    imageAreaMap.startDrawingUserIcon();
+                //TODO fix icon location
+           //     if(!newCellIds.contains(";"))
+           //         imageAreaMap.startDrawingUserIcon();
             }
         });
 

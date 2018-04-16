@@ -276,7 +276,7 @@ public class BayesianLocator {
             sum += probability;
 
             // Track cells that do not have training data for this BSSID
-            cellIds.remove(cellId);
+            cellIds.set(cellId - 1, 0);
         }
 
         int nonZeroProbabilities = 0;
