@@ -44,7 +44,7 @@ public class Area28MapModel {
     private static int colorLightSteelBlue;
     private static int colorSteelBlue;
     private List<Integer> possibleLocations;
-    private static final int mapHeight = 2610;
+    private static final int mapHeight = 2960;
     private static final int mapWidth = 1450;
     private int floor;
     private boolean showParticles;

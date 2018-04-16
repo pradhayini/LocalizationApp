@@ -17,7 +17,7 @@ import com.tudelft.tbd.viewmodels.BaseViewModel;
  * Reference: http://www.edu4java.com/en/androidgame/androidgame3.html
  */
 public class MapView extends SurfaceView {
-    private static final int mapHeight = 2610;
+    private static final int mapHeight = 2960;
     private static final int mapWidth = 1450;
     private MapUpdateThread mapUpdateThread;
 

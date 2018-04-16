@@ -149,6 +149,7 @@ public class ParticleFilterNavigationActivity extends AppCompatActivity implemen
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(sensorListener);
+
     }
 
     /**

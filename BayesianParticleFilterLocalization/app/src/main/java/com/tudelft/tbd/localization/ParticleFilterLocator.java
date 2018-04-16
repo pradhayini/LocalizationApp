@@ -204,7 +204,7 @@ public class ParticleFilterLocator {
                     transitionCounter++;
                 }
 
-            }else if(az_approx >= stairsMin && az_approx <= stairsMax){
+            }else if(az_approx >= stairsMin /*&& az_approx <= stairsMax*/){
                 if(movementMode == MovementMode.Stairs) {
                     // Noisy detections
                     if(transitionCounter > 0){
@@ -319,6 +319,25 @@ public class ParticleFilterLocator {
 
         // Normalize
         particleRepository.normalizeAllWeights();
+
+        // Update particle positions
+        particles = particleRepository.getAll();
+        for(ParticleDescriptor particle : particles){
+            switch (travelledDirection){
+                case North:
+                    particle.setY(particle.getY() - travelledDistance);
+                    break;
+                case South:
+                    particle.setY(particle.getY() + travelledDistance);
+                    break;
+                case East:
+                    particle.setX(particle.getX() + travelledDistance);
+                    break;
+                case West:
+                    particle.setX(particle.getX() - travelledDistance);
+                    break;
+            }
+        }
 
         updateMap.setValue(true);
     }
